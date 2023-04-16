@@ -16,6 +16,11 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+print(BASE_DIR)
+# import sys
+#
+# sys.path.append("/home/musa/workstation/opencv-proj/omr-rnd-api/omr_checker/OMR/src")
+# print(sys.path)
 
 # Raises Django's ImproperlyConfigured
 # exception if SECRET_KEY not in os.environ
@@ -43,6 +48,8 @@ INSTALLED_APPS = [
 
     # my app
     'opencv_api',
+    'drf_file_upload',
+    'omr_checker',
     # Third party
     'drf_yasg',
     'rest_framework',

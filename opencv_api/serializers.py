@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import StudentName, OmrResult
+from . import models
 
 
 class StudentNameSerializer(serializers.ModelSerializer):
@@ -7,7 +7,7 @@ class StudentNameSerializer(serializers.ModelSerializer):
 
     class Meta:
         """Metaclass to map serializer's fields with the model fields."""
-        model = StudentName
+        model = models.Student
         fields = ('first_name', 'last_name', 'date_modified')
         read_only_fields = ('date_created', 'date_modified')
 
@@ -17,7 +17,7 @@ class OmrResultSerializer(serializers.ModelSerializer):
 
     class Meta:
         """Metaclass to map serializer's fields with the model fields."""
-        model = OmrResult
+        model = models.OmrResult
         fields = ('id', 'image_path', 'is_processed', 'question_count', 'omr_type', 'remarks', 'date_modified')
         read_only_fields = ('date_created', 'date_modified')
 

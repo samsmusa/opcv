@@ -1,23 +1,24 @@
 import os
-import cv2
-import numpy as np
 import random
 import string
 
+import cv2
+import numpy as np
 from rest_framework import generics
 from rest_framework import mixins
-
-from api_server.settings import MEDIA_ROOT
-from .serializers import StudentNameSerializer, OmrResultSerializer
-from .models import StudentName, OmrResult
+from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
-from rest_framework import status
+
+# from drf_spectacular.utils import extend_schema
+from api_server.settings import MEDIA_ROOT
 from . import util_funcs as omr_utils
+from .models import Student, OmrResult
+from .serializers import StudentNameSerializer, OmrResultSerializer
 
 
 class StudentView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
-    queryset = StudentName.objects.all()
+    queryset = Student.objects.all()
 
     serializer_class = StudentNameSerializer
 

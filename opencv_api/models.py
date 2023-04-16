@@ -4,7 +4,7 @@ from django.db import models
 # Create your models here.
 
 
-class StudentName(models.Model):
+class Student(models.Model):
     """This class represents the student-name model."""
     first_name = models.CharField(max_length=255, blank=False, unique=False)
     last_name = models.CharField(max_length=255, blank=False, unique=False)
