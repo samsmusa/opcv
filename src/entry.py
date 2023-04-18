@@ -290,6 +290,7 @@ def process_files(
                 header=False,
                 index=False,
             )
+            data[os.path.splitext(file_name)[0]] = resp_array
         else:
             # multi_marked file
             logger.info(f"[{files_counter}] Found multi-marked file: '{file_id}'")
@@ -306,6 +307,7 @@ def process_files(
                     index=False,
                 )
                 data[os.path.splitext(file_id)[0]] = resp_array
+                print(file_id)
             # else:
             #     TODO:  Add appropriate record handling here
             #     pass

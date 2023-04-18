@@ -32,7 +32,7 @@ print(BASE_DIR)
 # SECRET_KEY = 'django-insecure-=c51c^x36&7=t0#r7c2y$v@%s&@lg4!r0hl^&*t*m%i-_+lnms'
 SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', True)
+DEBUG = config('DEBUG', False)
 
 ALLOWED_HOSTS = ['*']
 
@@ -53,7 +53,8 @@ INSTALLED_APPS = [
     # Third party
     'drf_yasg',
     'rest_framework',
-    'corsheaders'
+    'corsheaders',
+    'django_filters',
 ]
 
 # SWAGGER_SETTINGS = {
@@ -156,3 +157,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}
