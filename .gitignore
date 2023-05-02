@@ -8,6 +8,9 @@ media
 /*/**/__pycache__/
 # Backup files #
 *.bak
+*.idea
+/*/**/.idea
+.idea
 
 # If you are using PyCharm #
 # User-specific stuff
