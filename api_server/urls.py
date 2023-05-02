@@ -46,7 +46,8 @@ urlpatterns = [
         'api/',
         include([
             path('', include('opencv_api.urls')),
+            path('omr/', include('omr_checker.urls'))
         ])),
-    path('upload/', include('drf_file_upload.urls')),
-    path('omr/', include('omr_checker.urls')),
+    # path('upload/', include('drf_file_upload.urls')),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -4,7 +4,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 
-from drf_file_upload.settings import lib_settings
+from omr_checker.settings import lib_settings
 from .mixins.models import TimeStampMixin
 
 # Create your models here.

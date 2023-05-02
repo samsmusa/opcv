@@ -1,10 +1,35 @@
 import mimetypes
+from pathlib import Path
 
+from django.core.exceptions import ValidationError
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
-
-from drf_file_upload.serializers import UploadFileValidationMixin
+from django.core.validators import FileExtensionValidator
 from . import models
+from .settings import lib_settings
+
+
+class UploadFileValidationMixin:
+    def validate_file(self, value):
+        if not self.is_supported_file(value.name):
+            raise ValidationError("invalid-file-format")
+        if not self.respects_filesize_limit(value.size):
+            raise ValidationError("file-too-large")
+        return value
+
+    def is_supported_file(self, file):
+        allowed_formats = lib_settings.ALLOWED_FORMATS
+
+        if not allowed_formats:
+            return True
+
+        mimetype = mimetypes.guess_type(file)[0]
+        return mimetype in allowed_formats
+
+    def respects_filesize_limit(self, size):
+        max_file_size = lib_settings.MAX_FILE_SIZE
+        if not max_file_size:
+            return True
+        return size <= max_file_size
 
 
 class ClassSerializer(serializers.ModelSerializer):
@@ -24,12 +49,10 @@ class StudentSerializer(serializers.ModelSerializer):
 
 
 class StudentSerializerPost(serializers.ModelSerializer):
-
     class Meta:
         model = models.Student
         fields = ["id", "first_name", "last_name", "user_name", "roll", "class_name"]
         read_only_fields = ["id"]
-
 
 
 class ExamSerializerPost(serializers.ModelSerializer):
@@ -60,7 +83,6 @@ class OMRResultSerializer(serializers.Serializer):
     marks = serializers.IntegerField()
 
 
-
 class ExamSerializerForOmr(serializers.ModelSerializer):
     classes = ClassSerializer(read_only=True)
 
@@ -83,7 +105,12 @@ class OMRUploadFileSerializer(UploadFileValidationMixin, serializers.ModelSerial
 class OMRResultSerializerFilter(serializers.ModelSerializer):
     student = StudentSerializer()
     exam = ExamSerializerForOmr()
+
     class Meta:
         model = models.OMRResult
         fields = "__all__"
 
+
+class SheetUploadSerializer(serializers.Serializer):
+    exam_id = serializers.IntegerField()
+    file = serializers.FileField(validators=[FileExtensionValidator(allowed_extensions=['zip'])])

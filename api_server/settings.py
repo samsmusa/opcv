@@ -48,7 +48,7 @@ INSTALLED_APPS = [
 
     # my app
     'opencv_api',
-    'drf_file_upload',
+    # 'drf_file_upload',
     'omr_checker',
     # Third party
     'drf_yasg',

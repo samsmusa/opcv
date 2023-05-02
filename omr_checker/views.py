@@ -1,4 +1,7 @@
+import zipfile
+
 import pandas as pd
+import requests
 from django.db import transaction, DatabaseError
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
@@ -73,7 +76,8 @@ class OmrResultView(mixins.CreateModelMixin, generics.GenericAPIView):
                         old = models.OMRResult.objects.filter(exam=_exam, student=_student).first()
                         if old:
                             old.delete()
-                        omr_results.append(models.OMRResult(exam=_exam, student=_student, mark=mark, image=f'files/{outfile}/CheckedOMRs/{roll}.jpg'))
+                        omr_results.append(models.OMRResult(exam=_exam, student=_student, mark=mark,
+                                                            image=f'files/{outfile}/CheckedOMRs/{roll}.jpg'))
 
                     models.OMRResult.objects.bulk_create(omr_results)
 
@@ -130,3 +134,23 @@ class ResultList(generics.ListAPIView):
     serializer_class = serializers.OMRResultSerializerFilter
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['exam', 'student']
+
+
+class SheetUpload(generics.GenericAPIView):
+    parser_classes = (MultiPartParser, FormParser)
+    serializer_class = serializers.SheetUploadSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            data = serializer.validated_data
+            url = 'https://www.jgcbd.edu.bd/api/get-exam-name-lists'
+            file = data['file']
+            exam_id = data['exam_id']
+            all_exam = requests.get(url).json()
+            with zipfile.ZipFile(file, 'r') as zip_ref:
+                zip_ref.extractall('folder name')
+                kl = zip_ref.namelist()
+            return Response({'detail': 'ok', 'data': all_exam}, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
