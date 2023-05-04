@@ -1,9 +1,11 @@
 import os
 import random
 import string
+import zipfile
 
 import cv2
 import numpy as np
+from django.shortcuts import render, get_object_or_404
 from rest_framework import generics
 from rest_framework import mixins
 from rest_framework import status
@@ -14,7 +16,9 @@ from rest_framework.response import Response
 from api_server.settings import MEDIA_ROOT
 from . import util_funcs as omr_utils
 from .models import Student, OmrResult
+from omr_checker import models as omr_checker_models
 from .serializers import StudentNameSerializer, OmrResultSerializer
+from . import serializers
 
 
 class StudentView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
@@ -126,3 +130,30 @@ class OmrResultView(mixins.ListModelMixin, mixins.CreateModelMixin, generics.Gen
                 print("Exception", e)
 
         return Response({"status": "failed"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class OmrScan(generics.CreateAPIView):
+    queryset = OmrResult.objects.all()
+    parser_classes = (MultiPartParser, FormParser)
+    serializer_class = serializers.OMRScanSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            sheet_id = serializer.validated_data.get('omr_sheet_id')
+            obj = get_object_or_404(omr_checker_models.OMRUpload, pk=sheet_id)
+            file = obj.file.open()
+
+            with zipfile.ZipFile(file, 'r') as zip_ref:
+                zip_ref.extractall('folder_name')
+                kl = zip_ref.namelist()
+            print(file.name)
+            return Response({"id": serializer.validated_data.get('omr_sheet_id')}, status=status.HTTP_200_OK)
+
+
+def new(request):
+    return render(request, 'New/index.html', {})
+
+
+def exam(request):
+    return render(request, 'New/index.html', {})

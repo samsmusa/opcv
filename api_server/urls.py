@@ -18,9 +18,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework import permissions
-from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+from rest_framework import permissions
 
 ...
 
@@ -38,16 +38,17 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api-doc/',
-         schema_view.with_ui('swagger', cache_timeout=0),
-         name='schema-swagger-ui'),
-    path(
-        'api/',
-        include([
-            path('', include('opencv_api.urls')),
-            path('omr/', include('omr_checker.urls'))
-        ])),
-    # path('upload/', include('drf_file_upload.urls')),
+                  path('admin/', admin.site.urls),
+                  path('api-doc/',
+                       schema_view.with_ui('swagger', cache_timeout=0),
+                       name='schema-swagger-ui'),
+                  path(
+                      '',
+                      include([
+                          # path('', include('opencv_api.urls')),
+                          path('', include('omr_checker.urls'))
+                      ])),
+                  # path('upload/', include('drf_file_upload.urls')),
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL,
+                                                                                         document_root=settings.STATIC_URL)

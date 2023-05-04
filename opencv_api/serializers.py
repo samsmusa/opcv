@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from . import models
+from omr_checker import models as omr_checker_models
 
 
 class StudentNameSerializer(serializers.ModelSerializer):
@@ -21,3 +22,6 @@ class OmrResultSerializer(serializers.ModelSerializer):
         fields = ('id', 'image_path', 'is_processed', 'question_count', 'omr_type', 'remarks', 'date_modified')
         read_only_fields = ('date_created', 'date_modified')
 
+
+class OMRScanSerializer(serializers.Serializer):
+    omr_sheet_id = serializers.IntegerField(min_value=1)
