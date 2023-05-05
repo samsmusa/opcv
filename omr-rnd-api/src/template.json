@@ -1,0 +1,28 @@
+{
+  "pageDimensions": [ 2556, 3583 ],
+  "customLabels": {},
+  "bubbleDimensions": [45, 45],
+  "fieldBlocks": {
+    "q01block": {
+      "origin": [600, 1620],
+      "bubblesGap": 79.70,
+      "labelsGap": 78.08,
+      "fieldLabels": ["q1..20"],
+      "fieldType": "QTYPE_MCQ4"
+    },
+    "q21block": {
+      "origin": [1200, 1620],
+      "bubblesGap": 79.70,
+      "labelsGap": 78.08,
+      "fieldLabels": ["q21..40"],
+      "fieldType": "QTYPE_MCQ4"
+    },
+    "q31block": {
+      "origin": [1800, 1620],
+      "bubblesGap": 79.70,
+      "labelsGap": 78.08,
+      "fieldLabels": ["q41..60"],
+      "fieldType": "QTYPE_MCQ4"
+    }
+  }
+}
